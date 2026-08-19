@@ -18,8 +18,8 @@ function ResultBadge({ comparison }: { comparison: SkillComparison }) {
   else icon = "—";
 
   return (
-    <span className={cn("inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded", classes)}>
-      {icon} {label}{suffix}
+    <span className={cn("inline-flex items-center gap-1 text-[11px] sm:text-xs font-medium px-1.5 sm:px-2 py-0.5 rounded whitespace-nowrap", classes)}>
+      <span>{icon}</span> <span>{label}{suffix}</span>
     </span>
   );
 }
@@ -37,22 +37,22 @@ export default function ComparisonTable({ comparisons }: ComparisonTableProps) {
   const notAssessed = comparisons.filter((c) => c.result === "not_assessed");
   
   const renderRow = (c: SkillComparison, i: number) => (
-    <tr key={`${c.skill_label}-${i}`} className="border-b last:border-0 hover:bg-muted/30 transition-colors">
-      <td className="px-4 py-2.5 font-medium">{c.skill_label}</td>
-      <td className="px-4 py-2.5 text-center text-muted-foreground">
+    <tr key={`${c.skill_label}-${i}`} className="border-b last:border-0 hover:bg-muted/30 transition-colors text-xs sm:text-sm">
+      <td className="px-2.5 sm:px-4 py-2.5 font-medium leading-snug">{c.skill_label}</td>
+      <td className="px-2 sm:px-4 py-2.5 text-center text-muted-foreground whitespace-nowrap">
         {LEVEL_LABELS[c.required_level]}
       </td>
-      <td className="px-4 py-2.5 text-center">
+      <td className="px-2 sm:px-4 py-2.5 text-center whitespace-nowrap">
         {c.candidate_level != null ? (
           <span>
             {LEVEL_LABELS[c.candidate_level]}
-            {c.is_override && <span className="text-xs text-muted-foreground ml-1">✏</span>}
+            {c.is_override && <span className="text-xs text-muted-foreground ml-1" title="Human override applied">✏</span>}
           </span>
         ) : (
           <span className="text-muted-foreground">—</span>
         )}
       </td>
-      <td className="px-4 py-2.5 text-center">
+      <td className="px-2.5 sm:px-4 py-2.5 text-center">
         <ResultBadge comparison={c} />
       </td>
     </tr>
@@ -61,27 +61,27 @@ export default function ComparisonTable({ comparisons }: ComparisonTableProps) {
   return (
     <div className="space-y-4">
       {/* Summary */}
-      <div className="flex flex-wrap items-center gap-4 text-sm font-medium bg-muted/30 px-4 py-3 rounded-lg border">
+      <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm font-medium bg-muted/30 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg border">
         {gapCount > 0 && <span className="text-red-600 dark:text-red-400">⚠ Gaps: {gapCount}</span>}
         {matchCount > 0 && <span className="text-green-600 dark:text-green-400">✅ Matches: {matchCount}</span>}
         {exceedCount > 0 && <span className="text-amber-600 dark:text-amber-500">⭐ Exceeds: {exceedCount}</span>}
-        <span className="ml-auto text-xs text-muted-foreground font-normal">✏ = human override applied</span>
+        <span className="ml-auto text-[11px] sm:text-xs text-muted-foreground font-normal">✏ = human override</span>
       </div>
 
       <div className="overflow-x-auto rounded-lg border shadow-sm">
-        <table className="w-full text-sm">
+        <table className="w-full text-xs sm:text-sm">
           <thead>
-            <tr className="border-b bg-muted/50">
-              <th className="text-left px-4 py-3 font-semibold text-muted-foreground">Skill</th>
-              <th className="text-center px-4 py-3 font-semibold text-muted-foreground">Required</th>
-              <th className="text-center px-4 py-3 font-semibold text-muted-foreground">Candidate</th>
-              <th className="text-center px-4 py-3 font-semibold text-muted-foreground">Result</th>
+            <tr className="border-b bg-muted/50 text-[11px] sm:text-xs uppercase tracking-wider">
+              <th className="text-left px-2.5 sm:px-4 py-2.5 sm:py-3 font-semibold text-muted-foreground">Skill</th>
+              <th className="text-center px-2 sm:px-4 py-2.5 sm:py-3 font-semibold text-muted-foreground whitespace-nowrap">Required</th>
+              <th className="text-center px-2 sm:px-4 py-2.5 sm:py-3 font-semibold text-muted-foreground whitespace-nowrap">Candidate</th>
+              <th className="text-center px-2.5 sm:px-4 py-2.5 sm:py-3 font-semibold text-muted-foreground">Result</th>
             </tr>
           </thead>
           {gaps.length > 0 && (
             <tbody className="group">
               <tr className="bg-red-50/50 dark:bg-red-950/20 border-b">
-                <td colSpan={4} className="px-4 py-2 text-xs font-semibold text-red-700 dark:text-red-400 uppercase tracking-wider">Priority Gaps</td>
+                <td colSpan={4} className="px-2.5 sm:px-4 py-1.5 sm:py-2 text-[10px] sm:text-xs font-semibold text-red-700 dark:text-red-400 uppercase tracking-wider">Priority Gaps</td>
               </tr>
               {gaps.map(renderRow)}
             </tbody>
@@ -89,7 +89,7 @@ export default function ComparisonTable({ comparisons }: ComparisonTableProps) {
           {matches.length > 0 && (
             <tbody className="group border-t-2 border-t-muted/50">
               <tr className="bg-green-50/50 dark:bg-green-950/20 border-b">
-                <td colSpan={4} className="px-4 py-2 text-xs font-semibold text-green-700 dark:text-green-400 uppercase tracking-wider">Matched Requirements</td>
+                <td colSpan={4} className="px-2.5 sm:px-4 py-1.5 sm:py-2 text-[10px] sm:text-xs font-semibold text-green-700 dark:text-green-400 uppercase tracking-wider">Matched Requirements</td>
               </tr>
               {matches.map(renderRow)}
             </tbody>
@@ -97,7 +97,7 @@ export default function ComparisonTable({ comparisons }: ComparisonTableProps) {
           {exceeds.length > 0 && (
             <tbody className="group border-t-2 border-t-muted/50">
               <tr className="bg-amber-50/50 dark:bg-amber-950/20 border-b">
-                <td colSpan={4} className="px-4 py-2 text-xs font-semibold text-amber-700 dark:text-amber-500 uppercase tracking-wider">Exceeding Expectations</td>
+                <td colSpan={4} className="px-2.5 sm:px-4 py-1.5 sm:py-2 text-[10px] sm:text-xs font-semibold text-amber-700 dark:text-amber-500 uppercase tracking-wider">Exceeding Expectations</td>
               </tr>
               {exceeds.map(renderRow)}
             </tbody>
@@ -105,7 +105,7 @@ export default function ComparisonTable({ comparisons }: ComparisonTableProps) {
           {notAssessed.length > 0 && (
             <tbody className="group border-t-2 border-t-muted/50">
               <tr className="bg-neutral-50/50 dark:bg-neutral-900/20 border-b">
-                <td colSpan={4} className="px-4 py-2 text-xs font-semibold text-neutral-600 dark:text-neutral-400 uppercase tracking-wider">Not Assessed</td>
+                <td colSpan={4} className="px-2.5 sm:px-4 py-1.5 sm:py-2 text-[10px] sm:text-xs font-semibold text-neutral-600 dark:text-neutral-400 uppercase tracking-wider">Not Assessed</td>
               </tr>
               {notAssessed.map(renderRow)}
             </tbody>
